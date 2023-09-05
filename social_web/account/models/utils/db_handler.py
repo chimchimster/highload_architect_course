@@ -1,17 +1,20 @@
+import os
+
 import aiopg
 import psycopg2
 import asyncio
-
+from dotenv import load_dotenv
 from functools import wraps
 from typing import Callable, Any
 
 
 class DatabaseHandler:
-    def __init__(self, db_name: str, user: str, password: str, host: str):
-        self._db_name = db_name
-        self._user = user
-        self._password = password
-        self._host = host
+    def __init__(self):
+        load_dotenv()
+        self._db_name = os.environ.get('pg_host')
+        self._user = os.environ.get('pg_user')
+        self._password = os.environ.get('pg_password')
+        self._host = os.environ.get('pg_host')
         self._dsn = f'dbname={self.db_name} user={self.user} password={self.password} host={self.host}'
 
     @property
