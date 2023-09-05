@@ -1,3 +1,7 @@
+# TODO
+# 1) Система аутентификации пользователей (база PostgreSQL)X
+
+
 import jinja2
 import aiohttp_jinja2
 
@@ -18,4 +22,4 @@ if __name__ == '__main__':
         enable_async=True,
     )
     app.add_routes(account_routes)
-    web.run_app(app)
+    web.run_app(app, host='127.0.0.1', port=5000)
