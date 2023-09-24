@@ -1,25 +1,14 @@
-# TODO
-# 1) Система аутентификации пользователей (база PostgreSQL)X
+import http.server
+import socketserver
 
 
-import jinja2
-import aiohttp_jinja2
+def main():
+    port = 8000
+    handler = http.server.SimpleHTTPRequestHandler
 
-from aiohttp import web
-from pathlib import Path
-from account import account_routes
+    with socketserver.TCPServer(("127.0.0.1", port), handler) as httpd:
+        httpd.serve_forever()
 
 
 if __name__ == '__main__':
-    app = web.Application()
-    aiohttp_jinja2.setup(
-        app,
-        loader=jinja2.FileSystemLoader(
-            Path.cwd().joinpath(
-                "templates",
-            )
-        ),
-        enable_async=True,
-    )
-    app.add_routes(account_routes)
-    web.run_app(app, host='127.0.0.1', port=5000)
+    main()
