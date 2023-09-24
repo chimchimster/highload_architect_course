@@ -7,6 +7,6 @@ template_env = Environment(
 )
 
 
-def render_template(template_name: str, context: dict = None):
+def render_template(template_name: str, context: dict):
     template = template_env.get_template(template_name)
     return template.render(context)

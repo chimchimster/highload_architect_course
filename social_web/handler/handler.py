@@ -36,8 +36,8 @@ class RequestHandler(BaseHTTPRequestHandler):
                     self.end_headers()
 
                     not_found = Path(self.base_templates_directory) / 'not_found.html'
-                    print(type(not_found))
-                    rendered_html = render_template(str(not_found))
+
+                    rendered_html = render_template('not_found.html', {})
 
                     self.wfile.write(rendered_html.encode())
             else:
@@ -45,10 +45,8 @@ class RequestHandler(BaseHTTPRequestHandler):
                 self.send_header('Content-Type', 'text/html')
                 self.end_headers()
 
-                not_found = Path(self.base_templates_directory) / 'not_found.html'
-
-                rendered_html = render_template(str(not_found))
-                self.wfile.write(rendered_html)
+                rendered_html = render_template('not_found.html', {})
+                self.wfile.write(rendered_html.encode())
         except Exception as e:
 
             self.send_response(500)
