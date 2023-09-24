@@ -35,8 +35,6 @@ class RequestHandler(BaseHTTPRequestHandler):
                     self.send_header('Content-Type', 'text/html')
                     self.end_headers()
 
-                    not_found = Path(self.base_templates_directory) / 'not_found.html'
-
                     rendered_html = render_template('not_found.html', {})
 
                     self.wfile.write(rendered_html.encode())
