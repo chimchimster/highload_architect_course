@@ -1,9 +1,8 @@
-import logging
-from http.server import BaseHTTPRequestHandler
 from pathlib import Path
 
 
-logging.basicConfig(level=logging.DEBUG)
+from http.server import BaseHTTPRequestHandler
+from social_web.jinja_handler import render_template
 
 
 class RequestHandler(BaseHTTPRequestHandler):
@@ -17,31 +16,30 @@ class RequestHandler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         try:
-
             if self.path in self.routes:
                 file_name = self.routes[self.path]
                 file_path = Path(self.base_templates_directory) / file_name
 
                 if file_path.is_file():
 
-                    with open(file_path, 'rb') as file:
-                        content = file.read()
-
                     self.send_response(200)
                     self.send_header('Content-Type', 'text/html')
                     self.end_headers()
-                    self.wfile.write(content)
+
+                    rendered_html = render_template('index.html', {'header': 'Hello, world!'})
+
+                    self.wfile.write(rendered_html.encode())
+
                 else:
                     self.send_response(404)
                     self.send_header('Content-Type', 'text/html')
                     self.end_headers()
 
                     not_found = Path(self.base_templates_directory) / 'not_found.html'
+                    print(type(not_found))
+                    rendered_html = render_template(str(not_found))
 
-                    with open(not_found, 'rb') as file:
-                        content = file.read()
-
-                    self.wfile.write(content)
+                    self.wfile.write(rendered_html.encode())
             else:
                 self.send_response(404)
                 self.send_header('Content-Type', 'text/html')
@@ -49,10 +47,8 @@ class RequestHandler(BaseHTTPRequestHandler):
 
                 not_found = Path(self.base_templates_directory) / 'not_found.html'
 
-                with open(not_found, 'rb') as file:
-                    content = file.read()
-
-                self.wfile.write(content)
+                rendered_html = render_template(str(not_found))
+                self.wfile.write(rendered_html)
         except Exception as e:
 
             self.send_response(500)
